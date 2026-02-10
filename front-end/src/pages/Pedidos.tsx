@@ -1,9 +1,8 @@
-import Product from '../components/Product'
-
 import { useState } from 'react'
+import CardOrders from '../components/CardOrders'
 
-const Home = () => {
-  const [category, setCategory] = useState('Hamburguer')
+const Pedidos = () => {
+  const [category, setCategory] = useState('Pendente')
 
   const handleChangeCategory = (newCategory: string) => {
     setCategory(newCategory)
@@ -25,35 +24,38 @@ const Home = () => {
 
   return (
     <div className="mx-auto w-full px-3 text-white md:w-184.25">
-      <div className="my-1 flex gap-2 md:my-3">
+      <div className="mt-1 mb-3 flex gap-2 md:my-3">
         <div
-          className={getCategoryClass('Hamburguer')}
-          onClick={() => handleChangeCategory('Hamburguer')}
+          className={getCategoryClass('Pendente')}
+          onClick={() => handleChangeCategory('Pendente')}
         >
-          Hamburger
+          Pendente
         </div>
         <div
-          className={getCategoryClass('Bebidas')}
-          onClick={() => handleChangeCategory('Bebidas')}
+          className={getCategoryClass('Retirado')}
+          onClick={() => handleChangeCategory('Retirado')}
         >
-          Bebidas
+          Retirado
         </div>
         <div
-          className={getCategoryClass('Porções')}
-          onClick={() => handleChangeCategory('Porções')}
+          className={getCategoryClass('Cancelado')}
+          onClick={() => handleChangeCategory('Cancelado')}
         >
-          Porções
+          Cancelado
         </div>
       </div>
-      <p className="p-3 font-bold text-[#F2DAAC] uppercase">{category}</p>
-      <div className="flex flex-col gap-1 md:gap-3">
-        <Product />
-        <Product />
-        <Product />
-        <Product />
+      <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
+        <CardOrders
+          id={1}
+          date="22/12/2026"
+          name="Arthur Vinicius"
+          orderTime="22:15"
+          deliveredTime="22:30"
+          total={124.75}
+        />
       </div>
     </div>
   )
 }
 
-export default Home
+export default Pedidos

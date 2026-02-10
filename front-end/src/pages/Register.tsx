@@ -10,11 +10,53 @@ const Register = () => {
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [cep, setCep] = useState('')
+  const [error, setError] = useState('')
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    console.log({ name, email, password, confirmPassword, cep })
+    try {
+      if (!name || !email || !password || !cep) {
+        setError('Todas as informações são obrigatórias')
+        return
+      } else if (password !== confirmPassword) {
+        setError('Senhas não conferem')
+        return
+      }
+
+      const response = await fetch('http://localhost:3000/register', {
+        method: 'POST',
+        headers: { 'Content-type': 'application/json' },
+        body: JSON.stringify({ name, email, password, cep })
+      })
+
+      switch (response.status) {
+        case 409:
+          setError('E-mail já cadastrado')
+          break
+        case 400:
+          setError('Todas as informações são obrigatórias')
+          break
+        case 201:
+          setName('')
+          setEmail('')
+          setPassword('')
+          setCep('')
+          setError('')
+          setConfirmPassword('')
+          break
+        case 500:
+          setError('Tente novamente mais tarde!')
+          break
+        default:
+          setError('')
+      }
+
+      const data = await response.json()
+      console.log(data)
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   return (
@@ -22,9 +64,13 @@ const Register = () => {
       className="flex h-screen items-center justify-center bg-[#161410]"
       onSubmit={handleSubmit}
     >
-      <div className="flex flex-col items-center justify-center gap-2">
+      <div className="flex flex-col justify-center gap-2">
         <Link to="/">
-          <img src="/logo (3).png" alt="Casa do Hamburguer" className="mb-4" />
+          <img
+            src="/logo (3).png"
+            alt="Casa do Hamburguer"
+            className="mx-auto mb-4"
+          />
         </Link>
         <Input
           placeholder="Nome completo"
@@ -56,10 +102,13 @@ const Register = () => {
           value={cep}
           onChange={(e) => setCep(e.target.value)}
         />
-        <Button title="Criar conta" />
-        <Link to="/login" className="w-full">
-          <Button title="Já tenho uma conta" variant="outline" />
-        </Link>
+        <p className="font-bold text-red-500">{error}</p>
+        <div className="mt-3 flex w-full flex-col gap-2">
+          <Button title="Criar conta" type="submit" />
+          <Link to="/login" className="w-full">
+            <Button title="Já tenho uma conta" variant="outline" />
+          </Link>
+        </div>
       </div>
     </form>
   )
