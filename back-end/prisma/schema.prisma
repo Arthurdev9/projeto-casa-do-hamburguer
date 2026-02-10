@@ -15,3 +15,12 @@ model User {
   cep String
   admin Boolean @default(false)
 }
+
+model Product {
+  id String @id @default(dbgenerated("gen_random_uuid()"))
+  name String
+  description String
+  price Int
+  img String
+  createdAt DateTime @default(now())
+}
