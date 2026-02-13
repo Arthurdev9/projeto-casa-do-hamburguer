@@ -1,11 +1,13 @@
-import { useContext, useEffect } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { UserContext } from '../../contexts/UserContext'
 import { LogOut, ShoppingCart, Box, LayoutDashboard, Plus } from 'lucide-react'
+import AddProductModal from '../AddProductModal'
 
 const Header = () => {
   const { user, setUser } = useContext(UserContext)
   const location = useLocation()
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   useEffect(() => {
     const handleAuthUser = async () => {
@@ -82,7 +84,10 @@ const Header = () => {
                     <LayoutDashboard size={18} />
                   </div>
                 </Link>
-                <div className="flex h-8.75 w-8.75 cursor-pointer items-center justify-center rounded-md border border-[#F2DAAC]">
+                <div
+                  className="flex h-8.75 w-8.75 cursor-pointer items-center justify-center rounded-md border border-[#F2DAAC]"
+                  onClick={() => setIsModalOpen(true)}
+                >
                   <Plus size={18} />
                 </div>
               </div>
@@ -111,6 +116,10 @@ const Header = () => {
           </Link>
         )}
       </div>
+      <AddProductModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </div>
   )
 }

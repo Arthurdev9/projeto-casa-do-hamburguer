@@ -1,3 +1,6 @@
 export const formatterPrice = (value: number) => {
-  return `R$ ${value.toFixed(2).replace('.', ',')}`
+  return new Intl.NumberFormat('pt-BR', {
+    style: 'currency',
+    currency: 'BRL'
+  }).format(value / 100)
 }
