@@ -3,9 +3,11 @@ import { Link, useLocation } from 'react-router-dom'
 import { UserContext } from '../../contexts/UserContext'
 import { LogOut, ShoppingCart, Box, LayoutDashboard, Plus } from 'lucide-react'
 import AddProductModal from '../AddProductModal'
+import { CartContext } from '../../contexts/CartContext'
 
 const Header = () => {
   const { user, setUser } = useContext(UserContext)
+  const { toggleCart, cartItems } = useContext(CartContext)
   const location = useLocation()
   const [isModalOpen, setIsModalOpen] = useState(false)
 
@@ -95,9 +97,13 @@ const Header = () => {
 
             <div className="relative cursor-pointer">
               <p className="absolute -top-4 -right-4 flex h-5 w-5 items-center justify-center rounded-full bg-[#F2DAAC] text-[#161410]">
-                1
+                {cartItems.length}
               </p>
-              <ShoppingCart size={18} className="cursor-pointer" />
+              <ShoppingCart
+                size={18}
+                className="cursor-pointer"
+                onClick={() => toggleCart()}
+              />
             </div>
             <div className="flex items-center gap-2">
               <p>{user?.name}</p>{' '}

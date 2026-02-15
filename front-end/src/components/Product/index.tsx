@@ -3,12 +3,14 @@ import { ShoppingBag } from 'lucide-react'
 import type { ProductInterface } from '../../types/Product'
 import { formatterPrice } from '../../utils/formatterPrice'
 import { CartContext } from '../../contexts/CartContext'
+import { UserContext } from '../../contexts/UserContext'
 
 type Props = ProductInterface & {
   onDelete: () => void
 }
 
 const Product = (product: Props) => {
+  const { user } = useContext(UserContext)
   const { name, description, price, img, onDelete } = product
   const { addToCart } = useContext(CartContext)
 
@@ -27,15 +29,17 @@ const Product = (product: Props) => {
             <p className="text-sm font-bold text-white uppercase md:text-lg">
               {name}
             </p>
-            <button
-              className="hidden w-fit cursor-pointer rounded-md border border-[#CB2C17] px-1 text-xs font-bold text-[#CB2C17] hover:bg-[#CB2C17] hover:text-white md:flex"
-              onClick={(e) => {
-                e.stopPropagation()
-                onDelete()
-              }}
-            >
-              Deletar
-            </button>
+            {user?.admin && (
+              <button
+                className="hidden w-fit cursor-pointer rounded-md border border-[#CB2C17] px-1 text-xs font-bold text-[#CB2C17] hover:bg-[#CB2C17] hover:text-white md:flex"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  onDelete()
+                }}
+              >
+                Deletar
+              </button>
+            )}
           </div>
           <p className="mt-1 text-xs text-[#848484] md:text-sm">
             {description}

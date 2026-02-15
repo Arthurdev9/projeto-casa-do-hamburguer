@@ -31,9 +31,42 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     setCartItems((prev) => prev.filter((item) => item.id !== id))
   }
 
+  const increaseQuantity = (id: string) => {
+    setCartItems((prev) =>
+      prev.map((item) =>
+        item.id === id ? { ...item, quantity: item.quantity + 1 } : item
+      )
+    )
+  }
+
+  const decreaseQuantity = (id: string) => {
+    setCartItems(
+      (prev) =>
+        prev
+          .map((item) => {
+            if (item.id === id) {
+              // Se a quantidade for 1 e diminuir, removemos o item ou mantemos 1?
+              // Geralmente, se for 1 e clicar em menos, o item é removido.
+              const newQuantity = item.quantity - 1
+              return newQuantity > 0 ? { ...item, quantity: newQuantity } : item
+            }
+            return item
+          })
+          .filter((item) => item.quantity > 0) // Remove se chegar a zero
+    )
+  }
+
   return (
     <CartContext.Provider
-      value={{ cartItems, isCartOpen, addToCart, toggleCart, removeFromCart }}
+      value={{
+        cartItems,
+        isCartOpen,
+        addToCart,
+        toggleCart,
+        removeFromCart,
+        increaseQuantity,
+        decreaseQuantity
+      }}
     >
       {children}
     </CartContext.Provider>

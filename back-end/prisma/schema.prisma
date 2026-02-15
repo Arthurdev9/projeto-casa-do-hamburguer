@@ -22,5 +22,26 @@ model Product {
   description String
   price Int
   img String
+  category String
   createdAt DateTime @default(now())
+}
+
+model Order {
+  id           String      @id @default(dbgenerated("gen_random_uuid()"))
+  customerName String
+  total        Int
+  status       String      @default("Pendente")
+  createdAt    DateTime    @default(now())
+  deliveredAt  DateTime?
+  items        OrderItem[]
+  userId       String?
+}
+
+model OrderItem {
+  id       String @id @default(dbgenerated("gen_random_uuid()"))
+  name     String
+  price    Int
+  quantity Int
+  orderId  String
+  order    Order  @relation(fields: [orderId], references: [id])
 }
