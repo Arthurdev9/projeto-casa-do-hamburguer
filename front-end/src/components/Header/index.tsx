@@ -16,7 +16,7 @@ const Header = () => {
   useEffect(() => {
     const handleAuthUser = async () => {
       try {
-        const response = await fetch('http://localhost:3000/me', {
+        const response = await fetch('https://projeto-casa-do-hamburguer.onrender.com/me', {
           credentials: 'include'
         })
 

@@ -7,7 +7,7 @@ export const ProductProvider = ({ children }: { children: ReactNode }) => {
 
   const fetchProducts = useCallback(async () => {
     try {
-      const response = await fetch('http://localhost:3000/products')
+      const response = await fetch('https://projeto-casa-do-hamburguer.onrender.com/products')
       const data = await response.json()
 
       setProducts(Array.isArray(data) ? data : [])

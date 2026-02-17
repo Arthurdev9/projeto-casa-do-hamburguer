@@ -5,7 +5,7 @@ export const createProduct = async (data: {
   price: number
   img: string
 }) => {
-  const response = await fetch(`http://localhost:3000/products`, {
+  const response = await fetch(`https://projeto-casa-do-hamburguer.onrender.com/products`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -22,7 +22,7 @@ export const createProduct = async (data: {
 }
 
 export const deleteProduct = async (id: string) => {
-  const response = await fetch(`http://localhost:3000/products/${id}`, {
+  const response = await fetch(`https://projeto-casa-do-hamburguer.onrender.com/products/${id}`, {
     method: 'DELETE',
     credentials: 'include'
   })

@@ -9,7 +9,7 @@ const Pedidos = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await fetch('http://localhost:3000/orders', {
+        const response = await fetch('https://projeto-casa-do-hamburguer.onrender.com/orders', {
           credentials: 'include'
         })
         if (response.ok) {
@@ -26,7 +26,7 @@ const Pedidos = () => {
 
   const handleStatusChange = async (id: string, newStatus: string) => {
     try {
-      const response = await fetch(`http://localhost:3000/orders/${id}`, {
+      const response = await fetch(`https://projeto-casa-do-hamburguer.onrender.com/orders/${id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: newStatus }),
