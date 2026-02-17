@@ -106,7 +106,6 @@ const Pedidos = () => {
           })}
       </div>
 
-      {/* Feedback visual se a aba estiver vazia */}
       {orders.filter((o) => o.status === category).length === 0 && (
         <div className="mt-10 flex flex-col items-center opacity-30">
           <p className="text-lg italic">

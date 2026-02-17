@@ -1,5 +1,7 @@
 import { CalendarFold, User, Watch } from 'lucide-react'
 import { formatterPrice } from '../../utils/formatterPrice'
+import { useContext } from 'react'
+import { UserContext } from '../../contexts/UserContext'
 
 type CardOrdersType = {
   id: string
@@ -22,18 +24,26 @@ const CardOrders = ({
   status,
   onStatusChange
 }: CardOrdersType) => {
+  const { user } = useContext(UserContext)
+
   return (
     <div className="rounded-md bg-[#F2DAAC] p-3 text-[#32343E] shadow-md">
       <div className="flex items-center justify-between">
-        <select
-          className="cursor-pointer rounded border border-[#32343E] bg-transparent px-1 text-sm font-bold"
-          value={status}
-          onChange={(e) => onStatusChange(id, e.target.value)}
-        >
-          <option value="Pendente">Pendente</option>
-          <option value="Retirado">Retirado</option>
-          <option value="Cancelado">Cancelado</option>
-        </select>
+        {user?.admin ? (
+          <select
+            className="cursor-pointer rounded border border-[#32343E] bg-transparent px-1 text-sm font-bold outline-none"
+            value={status}
+            onChange={(e) => onStatusChange(id, e.target.value)}
+          >
+            <option value="Pendente">Pendente</option>
+            <option value="Retirado">Retirado</option>
+            <option value="Cancelado">Cancelado</option>
+          </select>
+        ) : (
+          <div className="rounded bg-[#32343E] px-2 py-0.5 text-[10px] font-bold text-[#F2DAAC] uppercase">
+            Status: {status}
+          </div>
+        )}
       </div>
 
       <div className="mt-2 flex flex-col gap-2">

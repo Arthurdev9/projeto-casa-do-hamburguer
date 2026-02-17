@@ -1,25 +1,28 @@
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { CartContext } from '../../contexts/CartContext'
-import { X, Trash2, ChevronLeft, ChevronRight } from 'lucide-react'
+import { X, Trash2, ChevronLeft, ChevronRight, Loader2 } from 'lucide-react'
 import { formatterPrice } from '../../utils/formatterPrice'
 import { UserContext } from '../../contexts/UserContext'
+import { useNavigate } from 'react-router-dom'
 
 export default function CartAside() {
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const navigate = useNavigate()
+  const { user } = useContext(UserContext)
   const {
     cartItems,
     isCartOpen,
     toggleCart,
     removeFromCart,
     increaseQuantity,
-    decreaseQuantity
+    decreaseQuantity,
+    clearCart
   } = useContext(CartContext)
 
   const total = cartItems.reduce(
     (acc, item) => acc + item.price * item.quantity,
     0
   )
-
-  const { user } = useContext(UserContext)
 
   const handleCheckout = async () => {
     if (cartItems.length === 0) return
@@ -43,11 +46,14 @@ export default function CartAside() {
       })
 
       if (response.ok) {
-        alert('Pedido enviado com sucesso!')
+        clearCart()
         toggleCart()
+        navigate('/pedidos')
       }
     } catch (error) {
       console.error('Erro ao finalizar pedido', error)
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -82,7 +88,7 @@ export default function CartAside() {
                 className="flex gap-3 border-b border-[#161410]/10 pb-4"
               >
                 <img
-                  src={`/${item.img}`}
+                  src={item.img}
                   alt={item.name}
                   className="h-16 w-16 rounded-md object-cover"
                 />
@@ -142,7 +148,14 @@ export default function CartAside() {
               onClick={handleCheckout}
               className="w-full cursor-pointer rounded-md bg-[#F2DAAC] py-4 font-extrabold tracking-wider text-[#161410] uppercase transition-colors hover:bg-white"
             >
-              Finalizar Pedido
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="animate-spin" size={20} />
+                  Processando...
+                </>
+              ) : (
+                'Finalizar Pedido'
+              )}
             </button>
           </div>
         )}

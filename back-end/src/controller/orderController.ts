@@ -4,7 +4,7 @@ import { prisma } from '../db.js'
 export const createOrder = async (req: Request, res: Response) => {
   try {
     const { items, total } = req.body
-    const user = req.user // Pegamos o usuário do middleware de auth
+    const user = req.user
 
     if (!items || items.length === 0) {
       return res.status(400).json({ message: 'O carrinho está vazio' })
@@ -37,17 +37,21 @@ export const getOrders = async (req: Request, res: Response) => {
   try {
     const user = req.user
 
-    if (!user?.admin) {
-      return res.status(403).json({ message: 'Acesso negado' })
+    if (!user) {
+      return res.status(401).json({ message: 'Você precisa estar logado' })
     }
 
+    const whereClause = user.admin ? {} : { userId: user.id }
+
     const orders = await prisma.order.findMany({
+      where: whereClause,
       include: { items: true },
       orderBy: { createdAt: 'desc' }
     })
 
     res.json(orders)
   } catch (error) {
+    console.error(error)
     res.status(500).json({ message: 'Erro ao buscar pedidos' })
   }
 }

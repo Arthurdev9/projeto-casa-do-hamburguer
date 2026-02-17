@@ -66,6 +66,7 @@ export default function AddProductModal({ isOpen, onClose }: Props) {
             className="w-full rounded-md border border-gray-300 p-2 text-gray-900 focus:ring-2 focus:ring-black focus:outline-none"
             value={name}
             onChange={(e) => setName(e.target.value)}
+            minLength={3}
             required
           />
 
@@ -111,14 +112,14 @@ export default function AddProductModal({ isOpen, onClose }: Props) {
             <button
               type="button"
               onClick={onClose}
-              className="rounded-md bg-gray-100 px-4 py-2 font-medium text-gray-600 transition-colors hover:bg-gray-200"
+              className="cursor-pointer rounded-md bg-gray-100 px-4 py-2 font-medium text-gray-600 transition-colors hover:bg-gray-200"
             >
               Cancelar
             </button>
 
             <button
               type="submit"
-              className="rounded-md bg-black px-4 py-2 font-medium text-white transition-colors hover:bg-gray-800"
+              className="cursor-pointer rounded-md bg-black px-4 py-2 font-medium text-white transition-colors hover:bg-gray-800"
             >
               Salvar Produto
             </button>

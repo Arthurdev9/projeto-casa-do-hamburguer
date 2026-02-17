@@ -27,6 +27,10 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     setIsCartOpen(true)
   }
 
+  const clearCart = () => {
+    setCartItems([])
+  }
+
   const removeFromCart = (id: string) => {
     setCartItems((prev) => prev.filter((item) => item.id !== id))
   }
@@ -40,19 +44,16 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   }
 
   const decreaseQuantity = (id: string) => {
-    setCartItems(
-      (prev) =>
-        prev
-          .map((item) => {
-            if (item.id === id) {
-              // Se a quantidade for 1 e diminuir, removemos o item ou mantemos 1?
-              // Geralmente, se for 1 e clicar em menos, o item é removido.
-              const newQuantity = item.quantity - 1
-              return newQuantity > 0 ? { ...item, quantity: newQuantity } : item
-            }
-            return item
-          })
-          .filter((item) => item.quantity > 0) // Remove se chegar a zero
+    setCartItems((prev) =>
+      prev
+        .map((item) => {
+          if (item.id === id) {
+            const newQuantity = item.quantity - 1
+            return newQuantity > 0 ? { ...item, quantity: newQuantity } : item
+          }
+          return item
+        })
+        .filter((item) => item.quantity > 0)
     )
   }
 
@@ -65,7 +66,8 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         toggleCart,
         removeFromCart,
         increaseQuantity,
-        decreaseQuantity
+        decreaseQuantity,
+        clearCart
       }}
     >
       {children}

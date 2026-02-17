@@ -77,6 +77,7 @@ const Register = () => {
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
+          min={5}
         />
         <Input
           placeholder="E-mail"

@@ -1,15 +1,17 @@
 import { useContext, useEffect, useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { UserContext } from '../../contexts/UserContext'
 import { LogOut, ShoppingCart, Box, LayoutDashboard, Plus } from 'lucide-react'
 import AddProductModal from '../AddProductModal'
 import { CartContext } from '../../contexts/CartContext'
+import { ShoppingBag } from 'lucide-react'
 
 const Header = () => {
   const { user, setUser } = useContext(UserContext)
   const { toggleCart, cartItems } = useContext(CartContext)
   const location = useLocation()
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const navigate = useNavigate()
 
   useEffect(() => {
     const handleAuthUser = async () => {
@@ -48,6 +50,7 @@ const Header = () => {
       }
 
       setUser(null)
+      navigate('/')
     } catch (error) {
       console.log(error)
       return
@@ -94,11 +97,14 @@ const Header = () => {
                 </div>
               </div>
             )}
-
+            <Link to={'/pedidos'}>
+              <ShoppingBag size={18} />
+            </Link>
             <div className="relative cursor-pointer">
               <p className="absolute -top-4 -right-4 flex h-5 w-5 items-center justify-center rounded-full bg-[#F2DAAC] text-[#161410]">
                 {cartItems.length}
               </p>
+
               <ShoppingCart
                 size={18}
                 className="cursor-pointer"

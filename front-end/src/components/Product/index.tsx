@@ -21,7 +21,7 @@ const Product = (product: Props) => {
     >
       <div className="flex gap-2">
         <img
-          src={`/${img}`}
+          src={img}
           className="h-20.75 w-25 rounded-md object-cover md:h-41.5 md:w-50"
         />
         <div className="flex flex-1 flex-col">
