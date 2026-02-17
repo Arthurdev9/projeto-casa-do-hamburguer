@@ -39,7 +39,7 @@ const Header = () => {
 
   const handleLogout = async () => {
     try {
-      const response = await fetch('http://localhost:3000/logout', {
+      const response = await fetch('https://projeto-casa-do-hamburguer.onrender.com/logout', {
         method: 'POST',
         credentials: 'include'
       })

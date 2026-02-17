@@ -43,7 +43,10 @@ export const login = async (req: Request, res: Response) => {
     console.log(token)
 
     res.cookie('user', token, {
-      maxAge: 18000000
+      maxAge: 18000000,
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none'
     })
 
     res.status(200).json(userInfos)
@@ -105,7 +108,11 @@ export const logout = async (req: Request, res: Response) => {
   const { user } = req.cookies
 
   if (user) {
-    res.clearCookie('user')
+    res.clearCookie('user', {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'none'
+  })
     res.json({ message: 'Usuário deslogado' })
   }
 }
