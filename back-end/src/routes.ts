@@ -11,6 +11,7 @@ import {
   getOrders,
   updateOrderStatus
 } from './controller/orderController.js'
+import { healthCheck } from './controller/healthController.js'
 
 export const router = Router()
 
@@ -25,3 +26,5 @@ router.delete('/products/:id', authMiddleware, deleteProduct)
 router.post('/orders', authMiddleware, createOrder)
 router.get('/orders', authMiddleware, getOrders)
 router.patch('/orders/:id', authMiddleware, updateOrderStatus)
+
+router.get('/healthcheck', healthCheck)
