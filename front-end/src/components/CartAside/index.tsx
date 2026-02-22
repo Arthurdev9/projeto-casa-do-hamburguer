@@ -1,12 +1,11 @@
-import { useContext, useState } from 'react'
+import { useContext } from 'react'
 import { CartContext } from '../../contexts/CartContext'
-import { X, Trash2, ChevronLeft, ChevronRight, Loader2 } from 'lucide-react'
+import { X, Trash2, ChevronLeft, ChevronRight  } from 'lucide-react'
 import { formatterPrice } from '../../utils/formatterPrice'
 import { UserContext } from '../../contexts/UserContext'
 import { useNavigate } from 'react-router-dom'
 
 export default function CartAside() {
-  const [isSubmitting, setIsSubmitting] = useState(false)
   const navigate = useNavigate()
   const { user } = useContext(UserContext)
   const {
@@ -26,6 +25,12 @@ export default function CartAside() {
 
   const handleCheckout = async () => {
     if (cartItems.length === 0) return
+
+    if (!user) {
+    toggleCart()
+    navigate('/login')
+    return
+  }
 
     const orderData = {
       customerName: user?.name || 'Cliente Autenticado',
@@ -52,8 +57,6 @@ export default function CartAside() {
       }
     } catch (error) {
       console.error('Erro ao finalizar pedido', error)
-    } finally {
-      setIsSubmitting(false)
     }
   }
 
@@ -148,13 +151,10 @@ export default function CartAside() {
               onClick={handleCheckout}
               className="w-full cursor-pointer rounded-md bg-[#F2DAAC] py-4 font-extrabold tracking-wider text-[#161410] uppercase transition-colors hover:bg-white"
             >
-              {isSubmitting ? (
-                <>
-                  <Loader2 className="animate-spin" size={20} />
-                  Processando...
-                </>
-              ) : (
+              {user ? (
                 'Finalizar Pedido'
+              ) : (
+                'Faça o login'
               )}
             </button>
           </div>

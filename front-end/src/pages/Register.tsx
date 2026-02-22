@@ -2,7 +2,7 @@ import Input from '../components/Input'
 import Button from '../components/Button'
 
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 const Register = () => {
   const [name, setName] = useState('')
@@ -11,6 +11,8 @@ const Register = () => {
   const [confirmPassword, setConfirmPassword] = useState('')
   const [cep, setCep] = useState('')
   const [error, setError] = useState('')
+  const [loadingMessage, setLoadingMessage] = useState('')
+  const navigate = useNavigate()
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -29,7 +31,6 @@ const Register = () => {
         headers: { 'Content-type': 'application/json' },
         body: JSON.stringify({ name, email, password, cep })
       })
-
       switch (response.status) {
         case 409:
           setError('E-mail já cadastrado')
@@ -38,12 +39,16 @@ const Register = () => {
           setError('Todas as informações são obrigatórias')
           break
         case 201:
+          setLoadingMessage('Sua conta foi criada com sucesso! Redirecionando...')
           setName('')
           setEmail('')
           setPassword('')
           setCep('')
           setError('')
           setConfirmPassword('')
+          setTimeout(() => {
+          navigate('/login')
+        }, 3000)
           break
         case 500:
           setError('Tente novamente mais tarde!')
@@ -103,8 +108,21 @@ const Register = () => {
           value={cep}
           onChange={(e) => setCep(e.target.value)}
         />
-        <p className="font-bold text-red-500">{error}</p>
-        <div className="mt-3 flex w-full flex-col gap-2">
+        <div className="relative h-4 w-full flex items-center justify-center">
+          <div className="absolute top-0 w-full">
+            {error && (
+              <p className="text-center text-xs font-bold text-red-500">
+                {error}
+              </p>
+            )}
+            {loadingMessage && !error && (
+              <p className="animate-pulse text-center text-xs font-bold text-[#F2DAAC]">
+                {loadingMessage}
+              </p>
+            )}
+          </div>
+        </div>
+        <div className=" flex w-full flex-col gap-2">
           <Button title="Criar conta" type="submit" />
           <Link to="/login" className="w-full">
             <Button title="Já tenho uma conta" variant="outline" />

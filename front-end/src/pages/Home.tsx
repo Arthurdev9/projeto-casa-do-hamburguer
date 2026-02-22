@@ -5,11 +5,34 @@ import { ProductContext } from '../contexts/ProductContext'
 
 const Home = () => {
   const [category, setCategory] = useState('Hamburguer')
+  const [isLoading, setIsLoading] = useState(true)
+
+  const [loadingMessage, setLoadingMessage] = useState('Carregando cardápio...')
 
   const { products, fetchProducts, setProducts } = useContext(ProductContext)
 
   useEffect(() => {
-    fetchProducts()
+    let timer: ReturnType<typeof setTimeout>
+
+    const loadData = async () => {
+      try {
+        setIsLoading(true)
+
+        timer = setTimeout(() => {
+          setLoadingMessage('O servidor está acordando... Como usamos um serviço gratuito, o primeiro acesso do dia pode levar até 45 segundos. Obrigado pela paciência! 🍔')
+        }, 10000)
+
+        await fetchProducts()
+      } catch (error) {
+        console.error("Erro ao carregar produtos:", error)
+      } finally {
+        setIsLoading(false)
+        clearTimeout(timer)
+      }
+    }
+
+    loadData()
+    return () => clearTimeout(timer)
   }, [fetchProducts])
 
   const handleChangeCategory = (newCategory: string) => {
@@ -49,11 +72,7 @@ const Home = () => {
     <div className="mx-auto w-full px-3 text-white md:w-184.25">
       <div className="my-1 flex gap-2 md:my-3">
         {['Hamburguer', 'Bebidas', 'Porções'].map((cat) => (
-          <div
-            key={cat}
-            className={getCategoryClass(cat)}
-            onClick={() => handleChangeCategory(cat)}
-          >
+          <div key={cat} className={getCategoryClass(cat)} onClick={() => handleChangeCategory(cat)}>
             {cat}
           </div>
         ))}
@@ -62,7 +81,17 @@ const Home = () => {
       <p className="p-3 font-bold text-[#F2DAAC] uppercase">{category}</p>
 
       <div className="flex flex-col gap-1 md:gap-3">
-        {filteredProducts.length > 0 ? (
+        {isLoading ? (
+          <div className="flex flex-col items-center justify-center p-12 gap-6 text-center">
+            {/* Spinner animado */}
+            <div className="h-12 w-12 animate-spin rounded-full border-4 border-[#F2DAAC] border-t-transparent"></div>
+
+            {/* Mensagem Dinâmica */}
+            <p className="text-[#F2DAAC] font-medium animate-pulse max-w-sm">
+              {loadingMessage}
+            </p>
+          </div>
+        ) : filteredProducts.length > 0 ? (
           filteredProducts.map((product) => (
             <Product
               key={product.id}
